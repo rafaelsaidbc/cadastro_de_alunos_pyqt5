@@ -76,6 +76,70 @@ class InsertDialog(QDialog):
         address = self.addressinput.text()
 
 
+# função para deletar dados dos alunos
+class DeleteDialog(QDialog):
+    def __init__(self, *args, **kwargs):
+        super(DeleteDialog, self).__init__(*args, **kwargs)
+
+        self.QBtn = QPushButton()
+        self.QBtn.setText('Deletar')
+
+        self.setWindowTitle('Deletar Inscrição')
+        self.setFixedWidth(300)
+        self.setFixedHeight(100)
+
+        self.QBtn.clicked.connect(self.deletestudent)
+
+        layout = QVBoxLayout()
+
+        self.deleteinput = QLineEdit()
+        self.onlyInt = QIntValidator()
+        self.deleteinput.setValidator(self.onlyInt)
+        self.deleteinput.setPlaceholderText('Inscrição nº ')
+        layout.addWidget(self.deleteinput)
+
+        layout.addWidget(self.QBtn)
+        self.setLayout(layout)
+
+    def deletestudent(self):
+        delrol = ''
+        delrol = self.deleteinput.text()
+
+
+# função para pesquisar alunos no banco de dados
+class SearchDialog(QDialog):
+    def __init__(self, *args, **kwargs):
+        super(SearchDialog, self).__init__(*args, **kwargs)
+
+        self.QBtn = QPushButton()
+        self.QBtn.setText('Pesquisar')
+
+        # título do layout
+        self.setWindowTitle('Pesquisar aluno')
+        # dimensões da janela
+        self.setFixedWidth(300)
+        self.setFixedHeight(100)
+
+        # botão para realizar a pesquisa
+        self.QBtn.clicked.connect(self.searchstudent)
+
+        layout = QVBoxLayout()
+
+        # caixa de texto
+        self.searchinput = QLineEdit()
+        self.onlyInt = QIntValidator()
+        self.searchinput.setValidator(self.onlyInt)
+        self.searchinput.setPlaceholderText('Inscrição nº')
+        layout.addWidget(self.searchinput)
+
+        layout.addWidget(self.QBtn)
+        self.setLayout(layout)
+
+    def searchstudent(self):
+        searchrol = ''
+        searchrol = self.searchinput.text()
+
+
 class AboutDialog(QDialog):
     def __init__(self, *args, **kwargs):
         super(AboutDialog, self).__init__(*args, **kwargs)
@@ -160,6 +224,7 @@ class MainWindow(QMainWindow):
         toolbar.setMovable(False)
         # self é o formulário (janela), adiciona o toolbar a janela
         self.addToolBar(toolbar)
+
         # adiciona um botão na toolbar
         btn_ac_adduser = QAction(QIcon('add.png'), "Adicionar", self)
         btn_ac_adduser.triggered.connect(self.insert)
@@ -175,14 +240,16 @@ class MainWindow(QMainWindow):
 
         # adiciona um botão na toolbar
         btn_ac_search = QAction(QIcon('search.png'), "Pesquisar", self)
+        btn_ac_search.triggered.connect(self.search)
         # da visibilidade ao título
         btn_ac_search.setStatusTip('Pesquisar por Aluno')
         toolbar.addAction(btn_ac_search)
 
         # adiciona um botão na toolbar
         btn_ac_delete = QAction(QIcon('delete.png'), "Deletar", self)
+        btn_ac_delete.triggered.connect(self.delete)
         # da visibilidade ao título
-        btn_ac_delete.setStatusTip('Deletar cadastro do aluno')
+        btn_ac_delete.setStatusTip('Deletar aluno')
         toolbar.addAction(btn_ac_delete)
 
         # adiciona um botão na toolbar
@@ -195,10 +262,17 @@ class MainWindow(QMainWindow):
         dlg = InsertDialog()
         dlg.exec_()
 
+    def delete(self):
+        dlg = DeleteDialog()
+        dlg.exec_()
+
+    def search(self):
+        dlg = SearchDialog()
+        dlg.exec_()
+
     def about(self):
         dlg = AboutDialog()
         dlg.exec_()
-
 
 
 #cria a aplicação
